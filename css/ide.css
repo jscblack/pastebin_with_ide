@@ -6,7 +6,11 @@ html, body {
 }
 
 body {
-    background: url(/images/judge0_background.png) no-repeat center center fixed;
+    background: url(../images/judge0_background.png) no-repeat;
+    height: 100%;
+    width: 100%;
+    size: 100%;
+    overflow: hidden;
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -17,6 +21,10 @@ body {
     border-radius: 0 .28571429rem .28571429rem 0;
 }
 
+/* .monaco-editor.no-user-select .lines-content, .monaco-editor.no-user-select .view-line, .monaco-editor.no-user-select .view-lines{
+    font-size: 17px;
+} */
+
 .ui.selection.dropdown {
     width: 205px;
 }
@@ -24,7 +32,8 @@ body {
 .lm_header .lm_tab {
     padding-bottom: 3px;
     height: 16px;
-    font-family: "Droid Sans Mono", monospace, monospace, "Droid Sans Fallback";
+    text-align: center;
+    font-family: "Helvetica Neue", monospace, monospace, "Droid Sans Fallback";
     font-size: 14px;
 }
 
@@ -38,7 +47,7 @@ body {
     margin: 0;
     background: #1e1e1e;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    height: 45px;
+    height: 60px;
 }
 
 #navigation-message {
@@ -48,12 +57,21 @@ body {
 }
 
 @keyframes slide {
-    0% { transform: translateX(570px); }
-    100% { transform: translateX(-100%); }
+    0% {
+        transform: translateX(570px);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
+
 @-webkit-keyframes slide {
-    0% { transform: translateX(570px); }
-    100% { transform: translateX(-100%); }
+    0% {
+        transform: translateX(570px);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }
 
 .navigation-message-text {
@@ -81,7 +99,7 @@ body {
 }
 
 #site-header {
-    padding-left: 0;
+    padding-left: 10px;
     padding-top: 0;
     padding-bottom: 0;
 }
@@ -103,7 +121,8 @@ body {
 #site-footer, #status-line, #donate-line {
     background-color: #0E6EB8;
     bottom: 0;
-    font-family: "Droid Sans Mono", monospace, monospace, "Droid Sans Fallback";
+    text-align: center;
+    font-family: "Helvetica Neue", monospace, monospace, "Droid Sans Fallback";
     font-size: 13px;
     height: 19px;
     padding-left: 16px;
@@ -112,7 +131,7 @@ body {
 }
 
 #site-footer {
-    color: #41a5f1;
+    color: #fff;
     left: 0;
     text-align: center;
     width: 100%;
@@ -136,8 +155,8 @@ body {
 
 #status-line {
     color: #fff;
-    float: right;
-    right: 0;
+    float: left;
+    left: 0;
     text-align: right;
     width: fit-content;
 }
@@ -190,4 +209,59 @@ body {
 
 input[type="text"] {
     width: 205px !important;
+}
+
+.slide-btn {
+    width: 100px;
+    display: inline-block;
+    border: 1px solid;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.slide-btn .inner-on, .slide-btn .inner-off {
+    width: 151px;
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    left: 0;
+    cursor: pointer;
+    transition: left 0.5s;
+}
+
+.inner-on .left, .inner-off .left {
+    width: 50px;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background: #58b058;
+    text-align: center;
+    display: inline-block;
+    padding: 4px 0;
+}
+
+.inner-on .space, .inner-off .space {
+    width: 51px;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 4px 0;
+    color: #fff;
+    background-color: #f5f5f5;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+}
+
+.inner-on .right, .inner-off .right {
+    width: 50px;
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background: #f9a123;
+    text-align: center;
+    display: inline-block;
+    padding: 4px 0;
 }
