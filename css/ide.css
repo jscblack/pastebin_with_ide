@@ -136,7 +136,16 @@ body {
     text-align: center;
     width: 100%;
 }
-
+#faqtext
+{
+    color: rgb(0, 0, 0);
+    float: left;
+    left: 0;
+    text-align: left;
+    font-size: 16px;
+    width: fit-content;
+    font-weight: 700;
+}
 #site-footer a {
     color: #41a5f1;
     font-weight: bold;
@@ -157,10 +166,38 @@ body {
     color: #fff;
     float: left;
     left: 0;
-    text-align: right;
+    text-align: left;
     width: fit-content;
 }
 
+#server-stat-info {
+    color: rgb(0, 0, 0);
+    float: left;
+    left: 0;
+    text-align: left;
+    font-size: 16px;
+    width: fit-content;
+    font-weight: 700;
+}
+#sites-info {
+    color: rgb(0, 0, 0);
+    float: left;
+    left: 0;
+    text-align: left;
+    font-size: 16px;
+    width: fit-content;
+    font-weight: 700;
+}
+#site-modal .content
+{
+    color: rgb(0, 0, 0);
+    float: left;
+    left: 0;
+    text-align: left;
+    font-size: 16px;
+    width: fit-content;
+    font-weight: 700;
+}
 #editor-status-line {
     background: transparent;
     color: #fff;
@@ -208,7 +245,7 @@ body {
 }
 
 input[type="text"] {
-    width: 205px !important;
+    width: 140px !important;
 }
 
 .slide-btn {

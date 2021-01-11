@@ -1,14 +1,12 @@
 var defaultUrl =
   localStorageGetItem("api-url") || "yoururl";
 var apiUrl = defaultUrl;
-var wait = localStorageGetItem("wait") || false;
-var pbUrl = "https://pb.judge0.com";
+var wait = false;
 var check_timeout = 200;
 
-var blinkStatusLine = (localStorageGetItem("blink") || "true") === "true";
-var editorMode = localStorageGetItem("editorMode") || "normal";
-var redirectStderrToStdout =
-  (localStorageGetItem("redirectStderrToStdout") || "false") === "true";
+// var editorMode = localStorageGetItem("editorMode") || "normal";
+var editorMode = "normal";
+var redirectStderrToStdout = false;
 var editorModeObject = null;
 
 var font_Size = 16;
@@ -39,7 +37,8 @@ var $runBtn;
 var $navigationMessage;
 var $updates;
 var $statusLine;
-
+var $serverstat;
+var $savedmessage;
 var timeStart;
 var timeEnd;
 
@@ -246,17 +245,17 @@ function IsPC() {
   return flag;
 }
 
-function showError(title, content) {
-  $("#site-modal #title").html(title);
-  $("#site-modal .content").html(content);
+function showError() {
+  $("#site-modal #title").html("<i class='exclamation triangle icon'></i>错误");
+  $("#site-modal .content").html(
+    "<div class='ui form'><div class='inline fields'><span id='sites-info'>网络或服务器异常，请确认已经连接到以太网或稍等片刻再试</span></div>"
+  );
   $("#site-modal").modal("show");
+  consoleOutputEditor.setValue("Network Error.");
 }
 
 function handleError(jqXHR, textStatus, errorThrown) {
-  showError(
-    `${jqXHR.statusText} (${jqXHR.status})`,
-    `<pre>${JSON.stringify(jqXHR, null, 4)}</pre>`
-  );
+  showError();
 }
 
 function handleRunError(jqXHR, textStatus, errorThrown) {
@@ -280,14 +279,11 @@ function handleResult(data) {
 
   $statusLine.html(`${status.description}, ${time}, ${memory}`);
 
-  if (blinkStatusLine) {
-    $statusLine.addClass("blink");
-    setTimeout(function () {
-      blinkStatusLine = true;
-      localStorageSetItem("blink", "true");
-      $statusLine.removeClass("blink");
-    }, 3000);
-  }
+  $statusLine.addClass("blink");
+  setTimeout(function () {
+    $statusLine.removeClass("blink");
+  }, 3000);
+
   if (
     status.description === "Accepted" ||
     status.description === "Wrong Answer"
@@ -363,6 +359,12 @@ function getIdFromURI() {
 function save() {
   localStorageSetItem("source_code", encode(sourceEditor.getValue()));
   localStorageSetItem("language_id", $selectLanguage.val());
+  $("#site-message").css("display", "display");
+  $("#site-message").fadeTo("700", 1);
+  setTimeout("$('#site-message').fadeOut('3000')", 1000);
+  // $("#site-modal #title").html("提示");
+  // $("#site-modal .content").html("代码已保存");
+  // $("#site-modal").modal("show");
 }
 
 // function downloadSource() {
@@ -389,7 +391,42 @@ function loadSavedSource() {
   //   $statusLine.html(`${data.status.description}, ${time}, ${memory}`);
   changeEditorLanguage();
 }
-
+function chkstat() {
+  var opt = "";
+  var cnt = 0;
+  $.ajax({
+    url: apiUrl + "/statistics?invalidate_cache=true",
+    type: "GET",
+    async: false,
+    success: function (data, textStatus, jqXHR) {
+      //console.log(data);
+      cnt = data.submissions.today;
+    },
+  });
+  $.ajax({
+    url: apiUrl + "/workers",
+    type: "GET",
+    async: false,
+    success: function (data, textStatus, jqXHR) {
+      //console.log(data[0].available);
+      if (data[0].available === 1) {
+        opt += "服务器";
+        opt += "<span style='color: green;'> 可用</span>";
+      } else {
+        opt += "服务器";
+        opt += "<span style='color: red;'> 不可用</span>";
+      }
+      opt += "<br><br>目前队列中有 ";
+      opt += data[0].size;
+      opt += " 个提交，今日已处理 ";
+      opt += cnt;
+      opt += " 个提交</br>";
+      $serverstat.html(opt);
+    },
+    error: $serverstat.html("服务器 <span style='color: red;'> 不可用</span>"),
+    //error:opt +="<span style='color: red;'> 不可用</span>",
+  });
+}
 function run() {
   if ($runBtn.hasClass("loading")) return;
   document.getElementById("stdout-dot").hidden = true;
@@ -645,14 +682,18 @@ $(document).ready(function () {
       deleteSaveedSource();
     }
   });
-
+  $savedmessage = $("ui icon message");
   $runBtn = $("#run-btn");
+  $staBtn = $("#status-btn");
+  $staBtn.click(function (e) {
+    chkstat();
+  });
   $runBtn.click(function (e) {
     run();
   });
 
-  $navigationMessage = $("#navigation-message span");
-  $updates = $("#updates");
+  // $navigationMessage = $("#navigation-message span");
+  // $updates = $("#updates");
 
   $(`input[name="editor-mode"][value="${editorMode}"]`).prop("checked", true);
   $('input[name="editor-mode"]').on("change", function (e) {
@@ -673,6 +714,8 @@ $(document).ready(function () {
 
   $statusLine = $("#status-line");
 
+  $serverstat = $("#server-stat-info");
+
   $("body").keydown(function (e) {
     var keyCode = e.keyCode || e.which;
     if (keyCode == 120) {
@@ -691,13 +734,14 @@ $(document).ready(function () {
     //         localStorageSetItem("api-url", apiUrl);
     //     }
     // }
-    else if (keyCode == 118) {
-      // F7
-      e.preventDefault();
-      wait = !wait;
-      localStorageSetItem("wait", wait);
-      alert(`Submission wait is ${wait ? "ON. Enjoy" : "OFF"}.`);
-    } else if (event.ctrlKey && keyCode == 83) {
+    // else if (keyCode == 118) {
+    //   // F7
+    //   e.preventDefault();
+    //   wait = !wait;
+    //   localStorageSetItem("wait", wait);
+    //   alert(`Submission wait is ${wait ? "ON. Enjoy" : "OFF"}.`);
+    // }
+    else if (event.ctrlKey && keyCode == 83) {
       // Ctrl+S
       e.preventDefault();
       save();
@@ -931,6 +975,7 @@ $(document).ready(function () {
     });
 
     layout.init();
+    consoleOutputEditor.setValue("Welcome to yltf Web IDE!\nHave fun!");
   });
 });
 

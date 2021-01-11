@@ -35,8 +35,8 @@
         var require = {
             paths: {
                 "vs": "https://cdn.bootcdn.net/ajax/libs/monaco-editor/0.21.2/min/vs",
-                "monaco-vim": "https://unpkg.zhimg.com/monaco-vim/dist/monaco-vim",
-                "monaco-emacs": "https://unpkg.zhimg.com/monaco-emacs/dist/monaco-emacs"
+                "monaco-vim": "./js/monaco-vim",
+                "monaco-emacs": "./js/monaco-emacs",
             }
         };
     </script>
@@ -203,8 +203,11 @@
                     }
                 }
             </script> -->
-
-            <div class="item no-left-padding borderless">
+            <div class="item fitted borderless">
+               <button id="faq-btn" class="ui blue button" onclick="$('#faq').modal('show')"> FAQ </button>
+            </div>
+            
+            <div class="item borderless">
                 <button id="run-btn" class="ui primary labeled icon button"><i class="play icon"></i>运行 (F9)</button>
             </div>
         </div>
@@ -265,23 +268,34 @@
                 </div>
             </div>
         </div> -->
-    </div>
 
-    <div id="site-content"></div>
-    <div id="site-modal" class="ui modal">
-        <div class="header">
-            <i class="close icon"></i>
-            <span id="title"></span>
+
+    </div>
+    <div id="site-content">
+        <div id="site-message" class="ui icon message" style="width:160px; z-index:100; position:fixed; right:20px;top:100px; float:right; background:0#fff;display: none;">
+            <i class="mini save icon" style="font-size: 1.8rem;"></i>
+            <div class="content">
+              <div class="header" style="font-size:16px">
+                代码已保存
+              </div>
+            </div>
+          </div>
+
+    </div>
+    <div id="site-modal" class="ui tiny modal">
+        <i class="close icon"></i>
+        <div class="header"> 
+            <span id="title" ></span>
         </div>
-        <div class="scrolling content"></div>
-        <div class="actions">
+        <div class="content"></div>
+        <!-- <div class="actions">
             <div class="ui small labeled icon cancel button">
                 <i class="remove icon"></i>
                 关闭 (ESC)
             </div>
-        </div>
+        </div> -->
     </div>
-
+    
     <div id="site-settings" class="ui modal">
         <i class="close icon"></i>
         <div class="header">
@@ -291,38 +305,75 @@
         <div class="content">
             <div class="ui form">
                 <div class="inline fields">
-                    <label>编辑器模式</label>
+                    <label>编辑器模式（暂不开放）</label>
                     <div class="field">
-                        <div class="ui radio checkbox">
+                        <div class="ui radio disabled checkbox">
                             <input type="radio" name="editor-mode" value="normal" checked="checked">
                             <label>Normal</label>
                         </div>
                     </div>
                     <div class="field">
-                        <div class="ui radio checkbox">
+                        <div class="ui radio disabled checkbox">
                             <input type="radio" name="editor-mode" value="vim">
                             <label>Vim</label>
                         </div>
                     </div>
                     <div class="field">
-                        <div class="ui radio checkbox">
+                        <div class="ui radio disabled checkbox">
                             <input type="radio" name="editor-mode" value="emacs">
                             <label>Emacs</label>
                         </div>
                     </div>
                 </div>
-                <div class="inline field">
+                <!-- <div class="inline field">
                     <div class="ui checkbox">
                         <input type="checkbox" name="redirect-output">
                         <label>Redirect stderr to stdout</label>
                     </div>
+                </div> -->
+                <!-- <div class="inline field">
+                    <div class="uibutton">
+                        <input type="button" name="redirect-output">
+                        <label>评测服务状态</label>
+                    </div>
+                </div> -->
+
+                <div class="item no-left-padding borderless">
+                    <div class="link item" onclick="$('#server-status').modal('show')"> <button id="status-btn" class="ui blue button">评测服务状态</button></div>
                 </div>
             </div>
         </div>
     </div>
+    
+    <div id="server-status" class="ui tiny modal">
+        <i class="close icon"></i>
+        <div class="header">
+            <i class="cog icon"></i>
+            状态
+        </div>
+        <div class="content">
+            <div class="ui form">
+                <div class="inline fields">
+                    <span id="server-stat-info"></span>
+            </div>
+        </div>
+        </div>
+    </div>
 
-
-
+    <div id="faq" class="ui modal">
+        <i class="close icon"></i>
+        <div class="header">
+            <i class="info circle icon"></i>
+            FAQ
+        </div>
+        <div class="content">
+            <div class="ui form">
+                <div class="inline fields">
+                    <span id="faqtext" style="font-size: 20px;">倚栏听风Web IDE——基于Judge0的IDE demo二次开发<br> 致力做最友好，最简单，最高效的Web IDE</span>  
+            </div>
+        </div>
+        </div>
+    </div>
 
     <div id="site-footer">
         <div id="editor-status-line"></div>
