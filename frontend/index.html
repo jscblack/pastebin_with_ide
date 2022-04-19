@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description"
+        content="Free and open-source online code editor that allows you to write and execute code from a rich set of languages.">
+    <meta name="keywords"
+        content="online editor, online code editor, online ide, online compiler, online interpreter, run code online, learn programming online,            online debugger, programming in browser, online code runner, online code execution, debug online, debug C code online, debug C++ code online,            programming online, snippet, snippets, code snippet, code snippets, pastebin, execute code, programming in browser, run c online, run C++ online,            run java online, run python online, run ruby online, run c# online, run rust online, run pascal online, run basic online">
+    <meta name="author" content="Herman Zvonimir Došilović">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="倚栏听风Web IDE-轻量的云端IDE">
+    <meta property="og:description"
+        content="Free and open-source online code editor that allows you to write and execute code from a rich set of languages.">
+    <meta property="og:image" content="./images/wallpaper.png">
+    <script src="js/jquery.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"></script>
+    <script src="js/goldenlayout.min.js" integrity="sha256-NhJAZDfGgv4PiB+GVlSrPdh3uc75XXYSM4su8hgTchI="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/goldenlayout-base.css"
+        integrity="sha256-oIDR18yKFZtfjCJfDsJYpTBv1S9QmxYopeqw2dO96xM=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/goldenlayout-dark-theme.css"
+        integrity="sha256-ygw8PvSDJJUGLf6Q9KIQsYR3mOmiQNlDaxMLDOx9xL0=" crossorigin="anonymous" />
+    <script>        var require = { paths: { "vs": "vs/", "monaco-vim": "./js/monaco-vim", "monaco-emacs": "./js/monaco-emacs", } };</script>
+    <script src="vs/loader.js"></script>
+    <script src="vs/editor/editor.main.nls.js"></script>
+    <script src="vs/editor/editor.main.js"></script>
+    <link rel="stylesheet" href="css/semantic.min.css" integrity="sha256-bLGznxWGcwizfnii6tm9y26LelPxA/+krcuzSKeCuKo="
+        crossorigin="anonymous" />
+    <script src="js/semantic.min.js" integrity="sha256-t8GepnyPmw9t+foMh3mKNvcorqNHamSKtKRxxpUEgFI="
+        crossorigin="anonymous"></script>
+    <link href="css/Exo2.css" rel="stylesheet">
+    <script type="text/javascript" src="third_party/download.js"></script>
+    <link type="text/css" rel="stylesheet" href="css/ide.css">
+    <script type="text/javascript" src="js/ide.js"></script>
+    <title>倚栏听风Web IDE-轻量的云端IDE</title>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+</head>
+
+<body>
+    <div id="site-navigation" class="ui small inverted menu">
+        <div id="site-header" class="header item"><a href="https://ide.yilantingfeng.site/"><img id="site-icon"
+                    src="./images/judge0_icon.png">
+                <h2>倚栏听风 Web IDE</h2>
+            </a></div>
+        <div class="left menu">
+            <div class="ui dropdown item site-links on-hover"> 文件<i class="dropdown icon"></i>
+                <div class="menu"><a class="item" target="_blank" href="https://ide.yilantingfeng.site/"><i
+                            class="file code icon"></i> 新文件</a>
+                    <div class="item" onclick="save()"><i class="save icon"></i> 保存 (Ctrl + S)</div>
+                    <div class="item" onclick="downloadSource()"><i class="download icon"></i> 下载</div>
+                    <div id="insert-template-btn" class="item"><i class="file code outline icon"></i> 恢复默认代码</div>
+                </div>
+            </div>
+            <div class="link item" id="paste-area" onclick="$('#code-paste').modal('show')"><i
+                    class="slideshare icon"></i> Paste!</div>
+            <div class="link item" id="con-area" onclick="$('#site-settings').modal('show')"><i class="cog icon"></i> 设置
+            </div>
+            <div class="item borderless" id="select-language-area"><select id="select-language"
+                    class="ui fluid search selection dropdown">
+                    <option value="45" mode="UNKNOWN">Assembly (NASM 2.14.02)</option>
+                    <option value="46" mode="shell">Bash (5.0.0)</option>
+                    <option value="47" mode="UNKNOWN">Basic (FBC 1.07.1)</option>
+                    <option value="75" mode="c">C (Clang 7.0.1)</option>
+                    <option value="48" mode="c">C (GCC 7.4.0)</option>
+                    <option value="49" mode="c">C (GCC 8.3.0)</option>
+                    <option value="50" mode="c">C (GCC 9.2.0)</option>
+                    <option value="51" mode="csharp">C# (Mono 6.6.0.161)</option>
+                    <option value="76" mode="cpp">C++ (Clang 7.0.1)</option>
+                    <option value="52" mode="cpp">C++ (GCC 7.4.0)</option>
+                    <option value="53" mode="cpp">C++ (GCC 8.3.0)</option>
+                    <option value="54" mode="cpp">C++ (GCC 9.2.0)</option>
+                    <option value="1020" mode="cpp">C++ (GCC 9.2.0) with O2</option>
+                    <option value="86" mode="clojure">Clojure (1.10.1)</option>
+                    <option value="77" mode="UNKNOWN">COBOL (GnuCOBOL 2.2)</option>
+                    <option value="55" mode="UNKNOWN">Common Lisp (SBCL 2.0.0)</option>
+                    <option value="56" mode="UNKNOWN">D (DMD 2.089.1)</option>
+                    <option value="57" mode="UNKNOWN">Elixir (1.9.4)</option>
+                    <option value="58" mode="UNKNOWN">Erlang (OTP 22.2)</option>
+                    <option value="44" mode="plaintext">Executable</option>
+                    <option value="87" mode="fsharp">F# (.NET Core SDK 3.1.202)</option>
+                    <option value="60" mode="go">Go (1.13.5)</option>
+                    <option value="88" mode="UNKNOWN">Groovy (3.0.3)</option>
+                    <option value="61" mode="UNKNOWN">Haskell (GHC 8.8.1)</option>
+                    <option value="62" mode="java">Java (OpenJDK 13.0.1)</option>
+                    <option value="63" mode="javascript">JavaScript (Node.js 12.14.0)</option>
+                    <option value="78" mode="kotlin">Kotlin (1.3.70)</option>
+                    <option value="64" mode="lua">Lua (5.3.5)</option>
+                    <option value="79" mode="objective-c">Objective-C (Clang 7.0.1)</option>
+                    <option value="65" mode="UNKNOWN">OCaml (4.09.0)</option>
+                    <option value="66" mode="UNKNOWN">Octave (5.1.0)</option>
+                    <option value="67" mode="pascal">Pascal (FPC 3.0.4)</option>
+                    <option value="85" mode="perl">Perl (5.28.1)</option>
+                    <option value="68" mode="php">PHP (7.4.1)</option>
+                    <option value="43" mode="plaintext">Plain Text</option>
+                    <option value="69" mode="UNKNOWN">Prolog (GNU Prolog 1.4.5)</option>
+                    <option value="70" mode="python">Python (2.7.17)</option>
+                    <option value="71" mode="python">Python (3.8.1)</option>
+                    <option value="80" mode="r">R (4.0.0)</option>
+                    <option value="72" mode="ruby">Ruby (2.7.0)</option>
+                    <option value="73" mode="rust">Rust (1.40.0)</option>
+                    <option value="81" mode="UNKNOWN">Scala (2.13.2)</option>
+                    <option value="82" mode="sql">SQL (SQLite 3.27.2)</option>
+                    <option value="83" mode="swift">Swift (5.2.3)</option>
+                    <option value="74" mode="typescript">TypeScript (3.7.4)</option>
+                    <option value="84" mode="vb">Visual Basic.Net (vbnc 0.0.0.5943)</option>
+                </select></div>
+            <div class="item fitted borderless" id="compiler-options-area">
+                <div class="ui input"><input id="compiler-options" type="text" placeholder="编译器选项"></div>
+            </div>
+            <div class="item borderless" id="command-line-arguments-area">
+                <div class="ui input"><input id="command-line-arguments" type="text" placeholder="命令行参数"></div>
+            </div>
+            <div class="item fitted borderless" id="faq-area"><button id="faq-btn" class="ui blue button"
+                    onclick="$('#faq').modal('show')"> FAQ</button></div>
+            <div class="item borderless" id="pc-run"><button id="run-btn" class="ui primary labeled icon button"><i
+                        class="play icon"></i>运行 (F9)</button></div>
+            <div class="item borderless" id="min-run" style="display: none;"><button id="run-btn"
+                    class="ui primary button">运行</button></div>
+        </div>
+    </div>
+
+    <div id="site-content">
+        <div id="site-message" class="ui icon message"
+            style="width:160px; z-index:100; position:fixed; right:20px;top:100px; float:right; background:0#fff;display: none;">
+            <i class="mini save icon" style="font-size: 1.8rem;"></i>
+            <div class="content">
+                <div class="header" style="font-size:16px"> 代码已保存</div>
+            </div>
+        </div>
+
+    </div>
+    <div id="site-modal" class="ui tiny modal"><i class="close icon"></i>
+        <div class="header"><span id="title"></span></div>
+        <div class="content"></div>
+    </div>
+    <div id="site-settings" class="ui tiny modal"><i class="close icon"></i>
+        <div class="header"><i class="cog icon"></i> 设置</div>
+        <div class="content">
+            <div class="ui form">
+                <div class="inline fields"><label>编辑器模式（暂不开放）</label>
+                    <div class="field">
+                        <div class="ui radio disabled checkbox"><input type="radio" name="editor-mode" value="normal"
+                                checked="checked"><label>Normal</label></div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio disabled checkbox"><input type="radio" name="editor-mode"
+                                value="vim"><label>Vim</label></div>
+                    </div>
+                    <div class="field">
+                        <div class="ui radio disabled checkbox"><input type="radio" name="editor-mode"
+                                value="emacs"><label>Emacs</label></div>
+                    </div>
+                </div>
+                <div class="item no-left-padding borderless">
+                    <div class="link item" onclick="$('#server-status').modal('show')"><button id="status-btn"
+                            class="ui blue button">评测服务状态</button></div>
+                </div>
+                <!-- <div class="item no-left-padding borderless">
+                    <div class="link item" onclick="$('#latest-submissions').modal('show')" style="margin-left: 11rem;">
+                        <button id="submissions-btn" class="ui blue button">最近提交</button></div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <div id="code-paste" class="ui tiny modal"><i class="close icon"></i>
+        <div class="header"><i class="slideshare icon"></i> 代码快照剪贴板</div>
+        <div class="content">
+            <div class="ui form" id="paste-panel">
+                <div class="inline fields"><label>发布者：</label>
+                    <div class="field">
+                        <div class="ui input"><input id="poster-id" type="text" placeholder="默认Anonymous"></div>
+                    </div>
+                </div>
+                <div class="inline fields" style="display: flex;"><label>失效时间</label>
+                    <!--下拉选单，时间-->
+                    <div class="field">
+                        <div class="ui selection dropdown" id="expire-selection">
+                            <input type="hidden" id="poster-expire" name="expire-time">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">不可为空</div>
+                            <div class="menu">
+                                <div class="item" data-value=1>1 小时</div>
+                                <div class="item" data-value=6>6 小时</div>
+                                <div class="item" data-value=24>1 天</div>
+                                <div class="item" data-value=168>1 周</div>
+                                <div class="item" data-value=672>1 月</div>
+                                <div class="item" data-value=10752>1 年</div>
+                                <div class="item" data-value=-1>永不失效</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="item no-left-padding borderless">
+                        <button id="paste-btn" class="ui blue button">发布</button>
+                        <!--加载转圈-->
+                    </div>
+                    <div class="ui active inverted dimmer" id="paste-state" style="display: none;">
+                        <div class="ui text loader">发布中</div>
+                    </div>
+                </div>
+
+                <!--按钮 paste-->
+            </div>
+            <div class="ui form" id="paste-result" style="display: none;">
+                <div class="inline fields" style="position:relative;"><label>快照链接</label>
+                    <div class="ui action input" style="width: 450px;">
+                        <input readonly type="text" id="paste-link-res">
+                        <button class="ui teal right labeled icon button" id="paste-copy">
+                            <i id="copy-res" class="copy icon"></i>
+                            复制
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div id="server-status" class="ui tiny modal"><i class="close icon"></i>
+        <div class="header"><i class="cog icon"></i> 状态</div>
+        <div class="content">
+            <div class="ui form">
+                <div class="inline fields"><span id="server-stat-info"></span></div>
+            </div>
+        </div>
+    </div>
+    <div id="latest-submissions" class="ui tiny modal"><i class="close icon"></i>
+        <div class="header"><i class="cog icon"></i> 最近处理的提交（仅显示前20次）</div>
+        <div class="content">
+            <div class="ui form">
+                <div class="inline fields"><span id="server-stat-info"></span></div>
+            </div>
+        </div>
+    </div>
+    <div id="faq" class="ui modal"><i class="close icon"></i>
+        <div class="header"><i class="info circle icon"></i> FAQ</div>
+        <div class="content">
+            <div class="ui form">
+                <div class="inline fields"><span id="faqtext" style="font-size: 20px;">倚栏听风Web IDE——基于Judge0的IDE
+                        demo二次开发<br> 致力做最友好，最简单，最高效的Web IDE <br> 全新剪贴板功能已上线，欢迎使用</span></div>
+            </div>
+        </div>
+    </div>
+    <div id="site-footer">
+        <div id="editor-status-line"></div><span id="author-area">© 2016-2021 · Powered by judge0 Redesigned by <a
+                href=mailto:gehrychiang@aliyun.com style="color: #fff;">Gehrychiang</a></span><span
+            id="status-line"></span>
+    </div>
+</body>
+
+</html>
