@@ -2,7 +2,7 @@
 ![](https://pic-static.yilantingfeng.site/imgs/2022/04/19/21-12-11-0ff679075c9d72605ea0a302e0cfbc06-20220419211210-37c11e.png)
 
 ## About
-倚栏听风 IDE是一个全新的结合实时运行评测与代码共享的平台
+[**倚栏听风 IDE (See Here)**](https://ide.yilantingfeng.site/)是一个全新的结合实时运行评测与代码共享的平台
 
 在原作的基础上，不仅让代码的运行更加自然，还添加了包括对比输入输出结果（Diff Editor）在内的多种功能
 
